@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingLeft="0dp"
+                android:paddingRight="0dp"
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp"
+                tools:context=".MainActivity"
+                >
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
+
+        <ImageButton
+            android:id="@+id/linelistButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/lines_button_states"
+            android:scaleType="fitCenter"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onLinesButtonClick"/>
+
+        <fragment
+            android:id="@+id/dateTimeFragment"
+            android:name="serenitymind.menetrend.fragments.DateTimeFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/datetimefragment"
+            android:layout_weight="1"/>
+
+        <ImageButton
+            android:id="@+id/stoplistButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/stops_button_states"
+            android:scaleType="fitCenter"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:onClick="onStopsButtonClick"/>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/listFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:layout_weight="1" />
+
+
+</LinearLayout>
