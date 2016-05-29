@@ -13,7 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
 
 import serenitymind.menetrend.CustomAdapters.StopListAdapter;
 import serenitymind.menetrend.R;
@@ -159,6 +162,7 @@ public class StationListFragment extends Fragment
         if(stations != null)
         {
             adapter.addAll(stations);
+            adapter.sort(new Station.StationComparator());
             listView.setAdapter(adapter);
             setClickEventStationList(listView);
         }

@@ -1,7 +1,9 @@
 package serenitymind.menetrend.Schedule;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * Created by Masko on 2015.08.02..
@@ -54,9 +56,11 @@ public class Station
         @Override
         public int compare(Station lhs, Station rhs)
         {
-            int result = lhs.getName().compareToIgnoreCase(rhs.getName());
+            Collator collator = Collator.getInstance(Locale.getDefault());
+            collator.setStrength(Collator.SECONDARY);
+            int result = collator.compare(lhs.getName(),rhs.getName());
 
-            return 0;
+            return result;
         }
     }
 }
