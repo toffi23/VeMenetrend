@@ -102,7 +102,7 @@ public class LineListFragment extends Fragment
         if (lineList != null) {
             Log.d("LINESFRAGMENT", "lineList is not null");
             adapter.addAll(lineList);
-            adapter.sort(new Line.LineComparator());
+            adapter.sort(new Line.LineComparatorByNumber());
             listView.setAdapter(adapter);
             setClickEventLineList(listView);
         } else Log.d("LINESFRAGMENT", "lineList is null");

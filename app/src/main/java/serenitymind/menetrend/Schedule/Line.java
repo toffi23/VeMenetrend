@@ -10,12 +10,14 @@ import java.util.HashMap;
 public class Line implements Serializable
 {
     private String name;
+    private int lineNum;
     private HashMap<Integer,Track> tracks;
     private ArrayList<Start> starts;
 
     public Line(String pname)
     {
         name = pname;
+        this.lineNum = this.createLineNumber();
     }
 
     public void setTracks(HashMap<Integer,Track> ptracks)
@@ -62,10 +64,15 @@ public class Line implements Serializable
     @Override
     public String toString()
     {
-        return name;
+        return String.format("%d",lineNum);
     }
 
-    public static class LineComparator implements Comparator<Line>
+    public int getLineNumber()
+    {
+        return lineNum;
+    }
+
+    public static class LineComparatorByName implements Comparator<Line>
     {
         @Override
         public int compare(Line lhs, Line rhs)
@@ -74,4 +81,75 @@ public class Line implements Serializable
             return result;
         }
     }
+
+    public static class LineComparatorByNumber implements Comparator<Line>
+    {
+        @Override
+        public int compare(Line lhs, Line rhs)
+        {
+            int result = Integer.compare(lhs.getLineNumber(),rhs.getLineNumber());
+            return result;
+        }
+    }
+
+    private int createLineNumber()
+    {
+        int lineNum;
+        String tempName = name.substring(0,name.length()-1);
+
+        Log.d("DBG-linenumber",name+" -> "+tempName);
+
+        lineNum = Integer.parseInt(tempName,10);
+
+        return lineNum;
+    }
+
+    public Station getFirstStation()
+    {
+        Track tmpTrack = null;
+        for(Track t : tracks.values())
+        {
+            if(tmpTrack == null)
+            {
+                tmpTrack = t;
+            }
+
+            if(tmpTrack.getStops().size() < t.getStops().size())
+            {
+                tmpTrack = t;
+            }
+        }
+
+        if(tmpTrack != null)
+        {
+            return tmpTrack.getStops().get(0).getStation();
+        }
+
+        return null;
+    }
+
+    public Station getLastStation()
+    {
+        Track tmpTrack = null;
+        for(Track t : tracks.values())
+        {
+            if(tmpTrack == null)
+            {
+                tmpTrack = t;
+            }
+
+            if(tmpTrack.getStops().size() < t.getStops().size())
+            {
+                tmpTrack = t;
+            }
+        }
+
+        if(tmpTrack != null)
+        {
+            return tmpTrack.getStops().get(tmpTrack.getStops().size()-1).getStation();
+        }
+
+        return null;
+    }
+
 }
