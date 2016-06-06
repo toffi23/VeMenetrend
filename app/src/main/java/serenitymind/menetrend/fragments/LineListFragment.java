@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import serenitymind.menetrend.CustomAdapters.LineListAdapter;
 import serenitymind.menetrend.R;
 import serenitymind.menetrend.Schedule.DataBase;
 import serenitymind.menetrend.Schedule.Line;
@@ -62,7 +63,8 @@ public class LineListFragment extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
 
-        ArrayAdapter<Line> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        //ArrayAdapter<Line> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
+        LineListAdapter adapter;
         ListView listView = (ListView) getActivity().findViewById(R.id.fragmentList);
 
         ArrayList<Line> lineList = null;
@@ -101,10 +103,9 @@ public class LineListFragment extends Fragment
 
         if (lineList != null) {
             Log.d("LINESFRAGMENT", "lineList is not null");
-            adapter.addAll(lineList);
+            adapter = new LineListAdapter(getActivity(),lineList,mCallback);
             adapter.sort(new Line.LineComparatorByNumber());
             listView.setAdapter(adapter);
-            setClickEventLineList(listView);
         } else Log.d("LINESFRAGMENT", "lineList is null");
 
     }

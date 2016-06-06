@@ -43,6 +43,7 @@ public class StartListAdapter extends ArrayAdapter<ArrayList<Start>>
     {
         ArrayList<Start> starts = getItem(position);
 
+
         ViewHolder viewHolder;
         if(convertView == null)
         {

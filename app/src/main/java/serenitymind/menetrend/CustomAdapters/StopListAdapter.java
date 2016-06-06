@@ -40,6 +40,7 @@ public class StopListAdapter extends ArrayAdapter<Stop>
     {
        Stop stop = getItem(position);
 
+        // FIXME: 2016. 06. 06. Restore viewholder pattern and solve coloring issue
         ViewHolder viewHolder = new ViewHolder();
         if(convertView == null)
         {

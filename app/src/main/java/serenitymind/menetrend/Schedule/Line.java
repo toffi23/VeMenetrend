@@ -113,8 +113,7 @@ public class Line implements Serializable
             {
                 tmpTrack = t;
             }
-
-            if(tmpTrack.getStops().size() < t.getStops().size())
+            else if(tmpTrack.getStops().size() < t.getStops().size())
             {
                 tmpTrack = t;
             }
@@ -137,8 +136,7 @@ public class Line implements Serializable
             {
                 tmpTrack = t;
             }
-
-            if(tmpTrack.getStops().size() < t.getStops().size())
+            else if(tmpTrack.getStops().size() < t.getStops().size())
             {
                 tmpTrack = t;
             }

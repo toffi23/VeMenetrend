@@ -730,7 +730,7 @@
 		<Line name="4b">
 			<Tracks>
 				<Track id = "0">
-					<Stop station="0">0</Stop>
+					<Stop station="9">0</Stop>
 					<Stop station="23">1</Stop>
 					<Stop station="4">2</Stop>
 					<Stop station="41">3</Stop>
