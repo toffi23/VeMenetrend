@@ -103,6 +103,9 @@ public class StationListFragment extends Fragment
         }
     }
 
+    /**
+     * Indulási idők egy adott járathoz
+     */
     private void stationList_Starts()
     {
         ListView listView = (ListView) getActivity().findViewById(R.id.fragmentList);
@@ -122,6 +125,9 @@ public class StationListFragment extends Fragment
         }
     }
 
+    /**
+     * Adott járathoz tartozó megállók
+     */
     private void stationList_Stops()
     {
         ListView listView = (ListView) getActivity().findViewById(R.id.fragmentList);
@@ -133,7 +139,6 @@ public class StationListFragment extends Fragment
 
         ArrayList<Stop> stoplist;
         Line line = DataBase.getLine(lineName);
-        //Log.d("STATIONSFRAGMENT", "Stationlist of "+lineName);
 
         if(line != null)
         {
@@ -146,6 +151,9 @@ public class StationListFragment extends Fragment
         }
     }
 
+    /**
+     * Összes megálló
+     */
     private void stationList_Full()
     {
         ListView listView = (ListView) getActivity().findViewById(R.id.fragmentList);
@@ -221,7 +229,6 @@ public class StationListFragment extends Fragment
         int timeThreshold;
 
         Track track = start.getParent().getTrack(start.getTrackIndex());
-        // TODO: create better time handling
         for(Stop stop : track.getStops())
         {
             timeThreshold = start.getTimeInMins() + stop.getDelay();

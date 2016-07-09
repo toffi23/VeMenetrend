@@ -26,6 +26,9 @@ import serenitymind.menetrend.Schedule.Station;
 public class LineListFragment extends Fragment
 {
     public static final String HEADERKEY = "HEADERKEY";
+    public static final String MODESWITCH = "MODESWITCH";
+    public static final int MODE_FULL_LINELIST = 1;
+    public static final int MODE_STATION_LINELIST = 2;
 
     onLineSelectedListener mCallback;
 
@@ -63,6 +66,28 @@ public class LineListFragment extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
 
+        int modeSwitch = 0;
+
+        if(getArguments() != null)
+        {
+            modeSwitch = getArguments().getInt(MODESWITCH);
+
+        }
+
+        switch(modeSwitch)
+        {
+            case MODE_FULL_LINELIST:
+                createFullLineList();
+                break;
+            case MODE_STATION_LINELIST:
+                createStationLineList();
+                break;
+            default:
+                Log.d("DBG","Invalid modeswitch in LineListFragment");
+        }
+
+        /*
+
         //ArrayAdapter<Line> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
         LineListAdapter adapter;
         ListView listView = (ListView) getActivity().findViewById(R.id.fragmentList);
@@ -89,7 +114,6 @@ public class LineListFragment extends Fragment
         if(stationName == null)
         {
             lineList = DataBase.getLines();
-            Log.d("LINESFRAGMENT","Default list");
         }
         else
         {
@@ -97,17 +121,25 @@ public class LineListFragment extends Fragment
             if(station != null)
             {
                 lineList = station.getLines();
-                Log.d("LINESFRAGMENT","Linelist of "+stationName);
             }
         }
 
-        if (lineList != null) {
-            Log.d("LINESFRAGMENT", "lineList is not null");
+        if (stationName != null && lineList != null) {
             adapter = new LineListAdapter(getActivity(),lineList,mCallback);
             adapter.sort(new Line.LineComparatorByNumber());
             listView.setAdapter(adapter);
         } else Log.d("LINESFRAGMENT", "lineList is null");
+*/
+    }
 
+    private void createStationLineList()
+    {
+        // TODO: 2016. 07. 09. implement this method
+    }
+
+    private void createFullLineList()
+    {
+        // TODO: 2016. 07. 09. implement this method
     }
 
     private void setClickEventLineList(final ListView listView)

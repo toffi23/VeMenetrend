@@ -25,8 +25,6 @@ import serenitymind.menetrend.fragments.LineListFragment;
 import serenitymind.menetrend.fragments.StationListFragment;
 
 
-/* TODO:
- * - create custom adapters to display stops with time */
 public class MainActivity extends FragmentActivity
                           implements StationListFragment.onStationSelectedListener,
                                      LineListFragment.onLineSelectedListener {
