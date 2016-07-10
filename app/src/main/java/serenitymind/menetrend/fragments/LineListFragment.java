@@ -64,6 +64,7 @@ public class LineListFragment extends Fragment
         ArrayList<Line> lineList = null;
         String stationName = null;
         String headerText;
+        Station station = null;
 
         if(getArguments() != null)
         {
@@ -86,7 +87,7 @@ public class LineListFragment extends Fragment
         }
         else
         {
-            Station station = DataBase.getStation(stationName);
+            station = DataBase.getStation(stationName);
             if(station != null)
             {
                 lineList = station.getLines();
@@ -94,7 +95,7 @@ public class LineListFragment extends Fragment
         }
 
         if (lineList != null) {
-            adapter = new LineListAdapter(getActivity(),lineList,mCallback);
+            adapter = new LineListAdapter(getActivity(),lineList,mCallback,station);
             adapter.sort(new Line.LineComparatorByNumber());
             listView.setAdapter(adapter);
         } else Log.d("LINESFRAGMENT", "lineList is null");

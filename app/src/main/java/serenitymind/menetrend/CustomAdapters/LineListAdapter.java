@@ -19,6 +19,7 @@ import serenitymind.menetrend.Schedule.DataBase;
 import serenitymind.menetrend.Schedule.Line;
 import serenitymind.menetrend.Schedule.Start;
 import serenitymind.menetrend.CustomInterfaces.ScheduleItemSelectedListener;
+import serenitymind.menetrend.Schedule.Station;
 import serenitymind.menetrend.Schedule.Stop;
 import serenitymind.menetrend.Schedule.Track;
 
@@ -30,6 +31,7 @@ public class LineListAdapter extends ArrayAdapter<Line>
     private boolean colorSwitch; // used for alternate between bg colors
     private boolean completeLineList;
     private ScheduleItemSelectedListener mCallback;
+    private Station station;
 
     private static class ViewHolder
     {
@@ -45,12 +47,13 @@ public class LineListAdapter extends ArrayAdapter<Line>
         public LinearLayout linlayLines;
     }
 
-    public LineListAdapter(Context context, ArrayList<Line> lineList,ScheduleItemSelectedListener _callee)
+    public LineListAdapter(Context context, ArrayList<Line> lineList, ScheduleItemSelectedListener _callee, Station _station)
     {
         super(context,0,lineList);
 
-        completeLineList = lineList.size() == DataBase.getLines().size() ? true : false;
+        completeLineList = _station == null?true:false;
         mCallback = _callee;
+        station = _station;
     }
 
     public View getView(int position, View convertView, ViewGroup parent)
@@ -118,8 +121,6 @@ public class LineListAdapter extends ArrayAdapter<Line>
             final Line line = getItem(position);
 
             viewHolder.lineNrView.setText(String.format("%d",line.getLineNumber()));
-            //viewHolder.lineStartView.setText(line.getFirstStation().getName());//.substring(0,3));
-            //viewHolder.lineEndView.setText(line.getLastStation().getName());//.substring(0,3));
             viewHolder.lineNrView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
@@ -149,13 +150,17 @@ public class LineListAdapter extends ArrayAdapter<Line>
             Track track = start.getParent().getTrack(start.getTrackIndex());
             for (Stop stop : track.getStops())
             {
-                timeThreshold = start.getTimeInMins() + stop.getDelay();
-
-                if (currentTimeInMins <= timeThreshold)
+                if(stop.getStation() == station)
                 {
-                    linlay.addView(makeStopView(start,stop));
-                    stopTime++;
-                    if(stopTime >= maxStopTime)return;
+                    timeThreshold = start.getTimeInMins() + stop.getDelay();
+
+                    if (currentTimeInMins <= timeThreshold)
+                    {
+                        linlay.addView(makeStopView(start,stop));
+                        stopTime++;
+                        if(stopTime >= maxStopTime)return;
+                    }
+                    break;
                 }
             }
         }
