@@ -13,10 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
 
 import serenitymind.menetrend.CustomAdapters.StopListAdapter;
 import serenitymind.menetrend.R;
@@ -28,6 +25,7 @@ import serenitymind.menetrend.CustomAdapters.StartListAdapter;
 import serenitymind.menetrend.Schedule.Station;
 import serenitymind.menetrend.Schedule.Stop;
 import serenitymind.menetrend.Schedule.Track;
+import serenitymind.menetrend.CustomInterfaces.ScheduleItemSelectedListener;
 
 /**
  * Created by masko on 2016. 03. 21..
@@ -40,15 +38,8 @@ public class StationListFragment extends Fragment
     public static final int MODE_STATIONLIST_STOPS = 2;
     public static final int MODE_STATIONLIST_STARTS = 3;
 
-    onStationSelectedListener mCallbackStation;
+    private ScheduleItemSelectedListener mCallbackStation;
 
-
-    public interface onStationSelectedListener
-    {
-        void onStationSelected(Station station);
-        void onStopSelected(Stop stop);
-        void onStartSelected(Start start);
-    }
 
     @Override
     public void onAttach(Activity activity)
@@ -57,7 +48,7 @@ public class StationListFragment extends Fragment
 
         try
         {
-            mCallbackStation = (onStationSelectedListener) activity;
+            mCallbackStation = (ScheduleItemSelectedListener) activity;
         }
         catch (ClassCastException ex)
         {
@@ -199,16 +190,13 @@ public class StationListFragment extends Fragment
         if(firstStart < line.getStarts().size()) hour = line.getStarts().get(firstStart).getTimeInMins()/60;
         for(int i = firstStart; i<line.getStarts().size(); i++)
         {
-            //Log.d("DBG","HOUR:"+hour);
+
             s = line.getStarts().get(i);
-           //Log.d("DBG","starttime:"+s.toString());
             if(s.getTimeInMins()/60 != hour)
             {
                 hour = s.getTimeInMins() / 60;
                 if(starts.size()>0) startsList.add(starts);
-                //Log.d("DBG","startsList size:"+starts.size());
                 starts = new ArrayList<>();
-                //Log.d("DBG","new hour, size:"+startsList.size());
             }
             if(Calendarium.isStartActive(s))
             {
@@ -232,7 +220,6 @@ public class StationListFragment extends Fragment
         for(Stop stop : track.getStops())
         {
             timeThreshold = start.getTimeInMins() + stop.getDelay();
-            //Log.d("CREATELIST",line.getName()+" - "+tmps.getTimeStr()+" - "+line.getTrack(tmps.getTrack()).getLength());
 
             if(currentTimeInMins <= timeThreshold)
             {

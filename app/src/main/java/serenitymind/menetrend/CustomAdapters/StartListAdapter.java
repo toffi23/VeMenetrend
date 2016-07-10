@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import serenitymind.menetrend.R;
 import serenitymind.menetrend.Schedule.Start;
-import serenitymind.menetrend.fragments.StationListFragment;
+import serenitymind.menetrend.CustomInterfaces.ScheduleItemSelectedListener;
 
 /**
  * Created by masko on 2016. 05. 15..
@@ -23,7 +23,7 @@ import serenitymind.menetrend.fragments.StationListFragment;
 public class StartListAdapter extends ArrayAdapter<ArrayList<Start>>
 {
     private boolean colorSwitch; // used for alternate between bg colors
-    private StationListFragment.onStationSelectedListener mCallback;
+    private ScheduleItemSelectedListener mCallback;
 
     private static class ViewHolder
     {
@@ -31,7 +31,7 @@ public class StartListAdapter extends ArrayAdapter<ArrayList<Start>>
         LinearLayout linlayView;
     }
 
-    public StartListAdapter(Context context, ArrayList<ArrayList<Start>> startsList, StationListFragment.onStationSelectedListener mCallback)
+    public StartListAdapter(Context context, ArrayList<ArrayList<Start>> startsList, ScheduleItemSelectedListener mCallback)
     {
         super(context,0,startsList);
 

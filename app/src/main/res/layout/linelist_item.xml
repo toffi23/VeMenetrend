@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="horizontal"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="#000000">
+              android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/lineNumberTextView"
@@ -47,10 +46,15 @@
     </LinearLayout>
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="50dp"
         android:layout_weight="1"
-        android:background="#d9d9d9">
+        android:scrollbars="none">
 
+        <LinearLayout
+            android:id="@+id/linlay_lines"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"/>
     </HorizontalScrollView>
 
 </LinearLayout>

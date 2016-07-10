@@ -7,13 +7,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
+import serenitymind.menetrend.CustomInterfaces.ScheduleItemSelectedListener;
 import serenitymind.menetrend.Schedule.Calendarium;
 import serenitymind.menetrend.Schedule.DataBase;
 import serenitymind.menetrend.Schedule.Line;
@@ -26,8 +26,8 @@ import serenitymind.menetrend.fragments.StationListFragment;
 
 
 public class MainActivity extends FragmentActivity
-                          implements StationListFragment.onStationSelectedListener,
-                                     LineListFragment.onLineSelectedListener {
+                          implements ScheduleItemSelectedListener
+{
     // Parser object
     private XMLScheduleParser parser;
 

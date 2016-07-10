@@ -97,8 +97,6 @@ public class Line implements Serializable
         int lineNum;
         String tempName = name.substring(0,name.length()-1);
 
-        Log.d("DBG-linenumber",name+" -> "+tempName);
-
         lineNum = Integer.parseInt(tempName,10);
 
         return lineNum;
