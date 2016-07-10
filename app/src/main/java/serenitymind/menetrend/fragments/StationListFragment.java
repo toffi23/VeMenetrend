@@ -210,25 +210,25 @@ public class StationListFragment extends Fragment
     }
 
     private ArrayList<Stop> createStopList(Start start)
+{
+    ArrayList<Stop> stopList = new ArrayList<>();
+
+    int currentTimeInMins = Calendarium.getHHMMinMins();
+    int timeThreshold;
+
+    Track track = start.getParent().getTrack(start.getTrackIndex());
+    for(Stop stop : track.getStops())
     {
-        ArrayList<Stop> stopList = new ArrayList<>();
+        timeThreshold = start.getTimeInMins() + stop.getDelay();
 
-        int currentTimeInMins = Calendarium.getHHMMinMins();
-        int timeThreshold;
-
-        Track track = start.getParent().getTrack(start.getTrackIndex());
-        for(Stop stop : track.getStops())
+        if(currentTimeInMins <= timeThreshold)
         {
-            timeThreshold = start.getTimeInMins() + stop.getDelay();
-
-            if(currentTimeInMins <= timeThreshold)
-            {
-                stopList.add(stop);
-            }
+            stopList.add(stop);
         }
-
-        return stopList;
     }
+
+    return stopList;
+}
 
     private void setClickEventStopList(final ListView listView)
     {

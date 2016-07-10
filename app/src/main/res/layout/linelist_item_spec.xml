@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/lineNumberTextView_spec"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_weight="0"
+        android:background="#cfa414"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:gravity="center"
+        android:textSize="20dp"
+        />
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/linlay_lines_spec"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"/>
+    </HorizontalScrollView>
+
+</LinearLayout>

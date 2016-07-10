@@ -19,6 +19,8 @@ import serenitymind.menetrend.Schedule.DataBase;
 import serenitymind.menetrend.Schedule.Line;
 import serenitymind.menetrend.Schedule.Start;
 import serenitymind.menetrend.CustomInterfaces.ScheduleItemSelectedListener;
+import serenitymind.menetrend.Schedule.Stop;
+import serenitymind.menetrend.Schedule.Track;
 
 /**
  * Created by masko on 2016. 06. 06..
@@ -35,6 +37,11 @@ public class LineListAdapter extends ArrayAdapter<Line>
         public LinearLayout linearLayout;
         public TextView lineStartView;
         public TextView lineEndView;
+    }
+
+    private static class ViewHolderSpec
+    {
+        public TextView lineNrView;
         public LinearLayout linlayLines;
     }
 
@@ -48,30 +55,27 @@ public class LineListAdapter extends ArrayAdapter<Line>
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        ViewHolder viewHolder;
-        if(convertView == null)
-        {
-            viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.linelist_item,parent,false);
-            viewHolder.lineNrView = (TextView)convertView.findViewById(R.id.lineNumberTextView);
-            viewHolder.linearLayout = (LinearLayout)convertView.findViewById(R.id.lineListLinLay);
-            viewHolder.lineStartView = (TextView)convertView.findViewById(R.id.lineStartTextView);
-            viewHolder.lineEndView = (TextView)convertView.findViewById(R.id.lineEndTextView);
-            viewHolder.linlayLines = (LinearLayout)convertView.findViewById(R.id.linlay_lines);
-
-            convertView.setTag(viewHolder);
-        }
-        else
-        {
-            viewHolder = (ViewHolder)convertView.getTag();
-            viewHolder.linlayLines.removeAllViews();
-        }
-
-        final Line line = getItem(position);
-
-        // TODO: 2016. 06. 06. Include start times for the list. Until then use the complete version
         if(completeLineList)
         {
+            ViewHolder viewHolder;
+            if(convertView == null)
+            {
+                viewHolder = new ViewHolder();
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.linelist_item,parent,false);
+                viewHolder.lineNrView = (TextView)convertView.findViewById(R.id.lineNumberTextView);
+                viewHolder.linearLayout = (LinearLayout)convertView.findViewById(R.id.lineListLinLay);
+                viewHolder.lineStartView = (TextView)convertView.findViewById(R.id.lineStartTextView);
+                viewHolder.lineEndView = (TextView)convertView.findViewById(R.id.lineEndTextView);
+
+                convertView.setTag(viewHolder);
+            }
+            else
+            {
+                viewHolder = (ViewHolder)convertView.getTag();
+            }
+
+            final Line line = getItem(position);
+
             viewHolder.lineNrView.setText(String.format("%d",line.getLineNumber()));
             viewHolder.lineStartView.setText(line.getFirstStation().getName());//.substring(0,3));
             viewHolder.lineEndView.setText(line.getLastStation().getName());//.substring(0,3));
@@ -94,18 +98,29 @@ public class LineListAdapter extends ArrayAdapter<Line>
         }
         else
         {
-            viewHolder.lineNrView.setText(String.format("%d",line.getLineNumber()));
-            viewHolder.lineStartView.setText(line.getFirstStation().getName());//.substring(0,3));
-            viewHolder.lineEndView.setText(line.getLastStation().getName());//.substring(0,3));
-            viewHolder.lineNrView.setOnClickListener(new View.OnClickListener()
+            ViewHolderSpec viewHolder;
+            if(convertView == null)
             {
-                @Override
-                public void onClick(View v)
-                {
-                    mCallback.onLineSelected(line,line.getName());
-                }
-            });
-            viewHolder.linearLayout.setOnClickListener(new View.OnClickListener()
+                viewHolder = new ViewHolderSpec();
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.linelist_item_spec,parent,false);
+                viewHolder.lineNrView = (TextView)convertView.findViewById(R.id.lineNumberTextView_spec);
+                viewHolder.linlayLines = (LinearLayout)convertView.findViewById(R.id.linlay_lines_spec);
+
+                convertView.setTag(viewHolder);
+            }
+            else
+            {
+                viewHolder = (ViewHolderSpec) convertView.getTag();
+                viewHolder.linlayLines.removeAllViews();
+
+            }
+
+            final Line line = getItem(position);
+
+            viewHolder.lineNrView.setText(String.format("%d",line.getLineNumber()));
+            //viewHolder.lineStartView.setText(line.getFirstStation().getName());//.substring(0,3));
+            //viewHolder.lineEndView.setText(line.getLastStation().getName());//.substring(0,3));
+            viewHolder.lineNrView.setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View v)
@@ -123,35 +138,34 @@ public class LineListAdapter extends ArrayAdapter<Line>
 
     private void createStartList(LinearLayout linlay, Line line)
     {
-        int hour = 0;
-        int now = Calendarium.getHHMMinMins();
-        int trackLength;
-        int firstStart;
-        Start s;
-        for(firstStart = 0; firstStart < line.getStarts().size(); firstStart++)
-        {
-            s = line.getStarts().get(firstStart);
-            trackLength = line.getTrack(s.getTrackIndex()).getLength();
-            if(now <= s.getTimeInMins()+trackLength && Calendarium.isStartActive(s))
-            {
-                break;
-            }
-        }
+        int currentTimeInMins = Calendarium.getHHMMinMins();
+        int timeThreshold;
 
-        for(int i = firstStart; i<line.getStarts().size(); i++)
+        int maxStopTime = 3;
+        int stopTime = 0;
+
+        for(Start start : line.getStarts())
         {
-            s = line.getStarts().get(i);
-            if(Calendarium.isStartActive(s))
+            Track track = start.getParent().getTrack(start.getTrackIndex());
+            for (Stop stop : track.getStops())
             {
-               linlay.addView(makeStartView(s));
+                timeThreshold = start.getTimeInMins() + stop.getDelay();
+
+                if (currentTimeInMins <= timeThreshold)
+                {
+                    linlay.addView(makeStopView(start,stop));
+                    stopTime++;
+                    if(stopTime >= maxStopTime)return;
+                }
             }
         }
     }
 
-    private TextView makeStartView(final Start start)
+    private TextView makeStopView(final Start start, final Stop stop)
     {
         TextView tv = new TextView(getContext());
-        tv.setText(start.getTimeStr());
+        int stopTimeMin = start.getTimeInMins() + stop.getDelay();
+        tv.setText(Calendarium.formatTime(stopTimeMin/60,stopTimeMin%60));
         tv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         tv.setPadding(20,0,20,0);
         tv.setGravity(Gravity.CENTER);
@@ -166,7 +180,6 @@ public class LineListAdapter extends ArrayAdapter<Line>
             @Override
             public void onClick(View v)
             {
-                Log.d("DBG-startlistadapter",start.toString());
                 mCallback.onStartSelected(start);
             }
         });
