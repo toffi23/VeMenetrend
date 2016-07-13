@@ -46,8 +46,8 @@ public class Calendarium
     static
     {   /* Calendar month values are counted from 0 but days are from 1*/
         calendar = Calendar.getInstance();
-        startSummer.set(calendar.get((Calendar.YEAR)),7,15);
-        endSummer.set(calendar.get(Calendar.YEAR),9,31);
+        startSummer.set(calendar.get((Calendar.YEAR)),5,15);
+        endSummer.set(calendar.get(Calendar.YEAR),7,31);
 
         part1start.set(calendar.get(Calendar.YEAR),4,1);
         part1end.set(calendar.get(Calendar.YEAR),10,30);
