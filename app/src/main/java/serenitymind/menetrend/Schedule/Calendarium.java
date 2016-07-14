@@ -46,6 +46,8 @@ public class Calendarium
     static
     {   /* Calendar month values are counted from 0 but days are from 1*/
         calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+
         startSummer.set(calendar.get((Calendar.YEAR)),5,15);
         endSummer.set(calendar.get(Calendar.YEAR),7,31);
 
@@ -59,10 +61,18 @@ public class Calendarium
     }
 
     // static functions
+
+    /**
+     *
+     * @param year
+     * @param month - month is used as month+1 because Calendar class starts counting from 0 in month
+     * @param day
+     * @return
+     */
     public static String formatDate(int year,int month, int day)
     {
 
-        return String.format("%04d/%02d/%02d",year,month,day);
+        return String.format("%04d/%02d/%02d",year,month+1,day);
     }
 
     public static String formatTime(int hour, int  minute)
@@ -101,12 +111,15 @@ public class Calendarium
             case ACTIVE_SCHOOL:
                 return
                 (
-                    dayOfWeek == Calendar.MONDAY ||
-                    dayOfWeek == Calendar.TUESDAY ||
-                    dayOfWeek == Calendar.WEDNESDAY ||
-                    dayOfWeek == Calendar.THURSDAY ||
-                    dayOfWeek == Calendar.FRIDAY
-                ) && Calendarium.isSchoolTime();
+                    Calendarium.isSchoolTime() &&
+                    (
+                        dayOfWeek == Calendar.MONDAY ||
+                        dayOfWeek == Calendar.TUESDAY ||
+                        dayOfWeek == Calendar.WEDNESDAY ||
+                        dayOfWeek == Calendar.THURSDAY ||
+                        dayOfWeek == Calendar.FRIDAY
+                    )
+                );
             case ACTIVE_SATURDAY:
                 return
                 (
@@ -204,14 +217,15 @@ public class Calendarium
      */
     private static boolean isSchoolTime()
     {   // TODO: temporary solution until final date handling implementation
-        startSummer.set(Calendar.YEAR,calendar.YEAR);
+        startSummer.set(Calendar.YEAR,calendar.get(Calendar.YEAR));
+        endSummer.set(Calendar.YEAR,calendar.get(Calendar.YEAR));
 
         if((calendar.before(startSummer) || calendar.after(endSummer)))
         {
-            return false;
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**

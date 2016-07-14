@@ -43,6 +43,19 @@
             android:textSize="12dp"
             android:gravity="bottom"
             android:singleLine="true"/>
+
     </LinearLayout>
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/linlay_lines"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"/>
+    </HorizontalScrollView>
 
 </LinearLayout>

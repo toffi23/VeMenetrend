@@ -68,25 +68,6 @@ public class MainActivity extends FragmentActivity
 
     }
 
-    /**
-     * temporary function to test Calendarium::isStartActive
-     */
-    private void TEST_isStartActive() {
-        Log.d("TEST_isStartActive", "Date: " + Calendarium.calendar.getTime().toString());
-
-        ArrayList<Line> lines = DataBase.getLines();
-
-        for (Line l : lines) {
-            ArrayList<Start> starts = l.getStarts();
-
-            for (Start s : starts) {
-                boolean active = Calendarium.isStartActive(s);
-
-                Log.d("TEST_isStartActive", "L: " + l.getName() + " - S: " + s.getTimeStr() + " - T: " + s.getTrackIndex() + " - A: " + s.getActive() + " - R:" + active);
-            }
-        }
-    }
-
     public void onLinesButtonClick(View view) {
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Log.d("FRAGMENTMANAGER", "Count int linesbutton:" + getFragmentManager().getBackStackEntryCount());

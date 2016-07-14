@@ -39,11 +39,6 @@ public class LineListAdapter extends ArrayAdapter<Line>
         public LinearLayout linearLayout;
         public TextView lineStartView;
         public TextView lineEndView;
-    }
-
-    private static class ViewHolderSpec
-    {
-        public TextView lineNrView;
         public LinearLayout linlayLines;
     }
 
@@ -58,80 +53,51 @@ public class LineListAdapter extends ArrayAdapter<Line>
 
     public View getView(int position, View convertView, ViewGroup parent)
     {
-        if(completeLineList)
+        ViewHolder viewHolder;
+        if(convertView == null)
         {
-            ViewHolder viewHolder;
-            if(convertView == null)
-            {
-                viewHolder = new ViewHolder();
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.linelist_item,parent,false);
-                viewHolder.lineNrView = (TextView)convertView.findViewById(R.id.lineNumberTextView);
-                viewHolder.linearLayout = (LinearLayout)convertView.findViewById(R.id.lineListLinLay);
-                viewHolder.lineStartView = (TextView)convertView.findViewById(R.id.lineStartTextView);
-                viewHolder.lineEndView = (TextView)convertView.findViewById(R.id.lineEndTextView);
+            viewHolder = new ViewHolder();
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.linelist_item,parent,false);
+            viewHolder.lineNrView = (TextView)convertView.findViewById(R.id.lineNumberTextView);
+            viewHolder.linearLayout = (LinearLayout)convertView.findViewById(R.id.lineListLinLay);
+            viewHolder.lineStartView = (TextView)convertView.findViewById(R.id.lineStartTextView);
+            viewHolder.lineEndView = (TextView)convertView.findViewById(R.id.lineEndTextView);
+            viewHolder.linlayLines = (LinearLayout)convertView.findViewById(R.id.linlay_lines);
 
-                convertView.setTag(viewHolder);
-            }
-            else
-            {
-                viewHolder = (ViewHolder)convertView.getTag();
-            }
-
-            final Line line = getItem(position);
-
-            viewHolder.lineNrView.setText(String.format("%d",line.getLineNumber()));
-            viewHolder.lineStartView.setText(line.getFirstStation().getName());//.substring(0,3));
-            viewHolder.lineEndView.setText(line.getLastStation().getName());//.substring(0,3));
-            viewHolder.lineNrView.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    mCallback.onLineSelected(line,line.getName());
-                }
-            });
-            viewHolder.linearLayout.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    mCallback.onLineSelected(line,line.getName());
-                }
-            });
+            convertView.setTag(viewHolder);
         }
         else
         {
-            ViewHolderSpec viewHolder;
-            if(convertView == null)
-            {
-                viewHolder = new ViewHolderSpec();
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.linelist_item_spec,parent,false);
-                viewHolder.lineNrView = (TextView)convertView.findViewById(R.id.lineNumberTextView_spec);
-                viewHolder.linlayLines = (LinearLayout)convertView.findViewById(R.id.linlay_lines_spec);
+            viewHolder = (ViewHolder)convertView.getTag();
+            viewHolder.linlayLines.removeAllViews();
+        }
 
-                convertView.setTag(viewHolder);
+        final Line line = getItem(position);
+
+        viewHolder.lineNrView.setText(String.format("%d",line.getLineNumber()));
+        viewHolder.lineStartView.setText(line.getFirstStation().getName());//.substring(0,3));
+        viewHolder.lineEndView.setText(line.getLastStation().getName());//.substring(0,3));
+        viewHolder.lineNrView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mCallback.onLineSelected(line,line.getName());
             }
-            else
+        });
+        viewHolder.linearLayout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
             {
-                viewHolder = (ViewHolderSpec) convertView.getTag();
-                viewHolder.linlayLines.removeAllViews();
-
+                mCallback.onLineSelected(line,line.getName());
             }
+        });
 
-            final Line line = getItem(position);
-
-            viewHolder.lineNrView.setText(String.format("%d",line.getLineNumber()));
-            viewHolder.lineNrView.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    mCallback.onLineSelected(line,line.getName());
-                }
-            });
-
+        if(!completeLineList)
+        {
             colorSwitch = false;
-            createStartList(viewHolder.linlayLines,line);
+            createStartList(viewHolder.linlayLines, line);
         }
 
         return convertView;
@@ -147,6 +113,8 @@ public class LineListAdapter extends ArrayAdapter<Line>
 
         for(Start start : line.getStarts())
         {
+            if(!Calendarium.isStartActive(start))continue;
+
             Track track = start.getParent().getTrack(start.getTrackIndex());
             for (Stop stop : track.getStops())
             {
