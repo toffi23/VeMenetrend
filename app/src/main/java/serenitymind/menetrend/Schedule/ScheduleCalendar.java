@@ -20,7 +20,7 @@ public class ScheduleCalendar
 
     public ScheduleCalendar()
     {
-        ActiveCodes = new int[366];
+        ActiveCodes = new int[367]; // first element is reserved
         initActiveCodes();
     }
 
